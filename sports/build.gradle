@@ -71,17 +71,26 @@ task compileSportsApp(type: ABLCompile) {
 }
 compileSportsApp.dependsOn "createSportsDB", "createAvengersDB"
 
+// Compile the Sport app test sources
+task compileSportsAppTest(type: ABLCompile) {
+    source  "src/test/abl"
+    propath("src/test/abl", "${buildDir}/rcode/main/abl")
+    include "**/*.cls"
+    rcodeDir = "${buildDir}/rcode/test/abl"
+}
+compileSportsAppTest.dependsOn "createSportsDB", "createAvengersDB"
+
 // Unit test the Sport app tests
 task testSportsApp(type: ABLUnit) {
     source  "src/test/abl"
-    propath("src/main/abl", "src/test/abl")
+    propath("src/test/abl", "${buildDir}/rcode/main/abl")
     include "**/*.cls"
     outputDir = "${buildDir}/test-results/test"
     arguments = [haltOnFailure: "true"]
 }
 // For test ensure the databases are created and the data is loaded
-testSportsApp.dependsOn "createSportsDB", "createAvengersDB", "populateDataIntoAvengersDB"
+testSportsApp.dependsOn "compileSportsApp", "compileSportsAppTest", "createSportsDB", "createAvengersDB", "populateDataIntoAvengersDB"
 
 // Add dependencies for the life cycle tasks
-check.dependsOn "testSportsApp", "compileSportsApp"
+check.dependsOn "testSportsApp"
 build.dependsOn "compileSportsApp"
