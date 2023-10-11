@@ -29,10 +29,10 @@ OEDF provides Gradle plugins for building `OpenEdge` projects. The entry point o
 **Notes**
 - Follow this OEDF documentation for more details - https://docs.progress.com/bundle/openedge-devops-framework/page/Prerequisites.html
 - The script used in this sample was tested with `OpenEdge 12.7` version but the same should be applicable for any `OpenEdge 12.2+` version
-- For 11.7.x, OEDF is not certified. One should be able achieve a similar behavior by using ANT tasks provided by PCT and in DLC. Though, this might require extensive scripting and ANT tasks can become a little verbose.
+- For 11.7.x, OEDF is not certified. One should be able achieve a similar behavior by using ANT tasks provided by PCT and in DLC. Though, this might require extensive scripting and ANT tasks can become a little verbose
 
 ### Steps
-1. Navigate to the `sports` folder
+1. Navigate to the `sports` folder. Know about the plugins and tasks used by following the `build.gradle` file
 1. From a terminal, run the below command
     ```
     ./gradlew build -DDLC=<DLC-PATH>
@@ -48,4 +48,5 @@ OEDF provides Gradle plugins for building `OpenEdge` projects. The entry point o
 
 **Notes**
 - You should use either `gradlew.bat` or `./gradlew` depending the type of the terminal and the OS
-- To know about the plugins and tasks used follow the `build.gradle` file
+- For more details on the `Plugins` and the `Task Types` (and their configurations) refer to this - https://docs.progress.com/bundle/openedge-devops-framework/page/ABL-base-plugin.html
+ 

@@ -6,11 +6,14 @@
  */
 
 plugins { 
-    id "progress.openedge.abl-base" version "2.2.1" 
+    // Read more here at https://plugins.gradle.org/plugin/progress.openedge.abl-base
+    id "progress.openedge.abl-base" version "2.2.1"
+
+    //  Read more here at https://docs.gradle.org/current/userguide/base_plugin.html
     id "base" 
 }
 
-// DLC should be set as Environment Variable / System Property or Gradle Property to use OEDF plugins 
+// DLC should be set as Environment Variable, System Property or Gradle Property to use OEDF plugins 
 println "DLC: ${abl.dlcHome}"
 
 // Global settings that other tasks use
