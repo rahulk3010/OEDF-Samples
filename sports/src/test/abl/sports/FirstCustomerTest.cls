@@ -38,7 +38,7 @@ CLASS sports.FirstCustomerTest:
         VAR FirstCustomer firstCustomer.
         
         FIND FIRST Customer.
-        custNameExpected = Customer.City.
+        custNameExpected = Customer.Name.
         
         firstCustomer = NEW FirstCustomer().
         custNameActual = firstCustomer:getName().

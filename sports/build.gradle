@@ -4,3 +4,50 @@
  * This is a general purpose Gradle build.
  * Learn more about Gradle by exploring our samples at https://docs.gradle.org/7.3.3/samples
  */
+
+plugins { 
+    id "progress.openedge.abl-base" version "2.2.1" 
+    id "base" 
+}
+
+println "DLC: ${abl.dlcHome}"
+
+// Global settings that other tasks use
+abl {
+    // Database details defined inside this section applies to other ABLRun, ABLCompile and ABLUnit tasks
+    dbConnection {
+        dbName="${buildDir}/db/sports2020/sports"
+        connectionParameters = "-1"
+    }
+}
+
+// Create Sports2020 database as part of the build
+task createSports2020(type: CreateDB) {
+    dbName = 'sports'
+    sourceDb = "${dlcHome}/sports2020"
+    outputDir = "${buildDir}/db/sports2020"
+}
+
+// Compile the Sport app sources
+task compileSportsApp(type: ABLCompile) {
+    source  "src/main/abl"
+    propath "src/main/abl"
+    include "**/*.cls"
+    include "**/*.p"
+    rcodeDir = "${buildDir}/rcode/main/abl"
+}
+compileSportsApp.dependsOn "createSports2020"
+
+// Unit test the Sport app tests
+task testSportsApp(type: ABLUnit) {
+    source  "src/test/abl"
+    propath("src/main/abl", "src/test/abl")
+    include "**/*.cls"
+    outputDir = "${buildDir}/test-results/test"
+    arguments = [haltOnFailure: "true"]
+}
+testSportsApp.dependsOn "createSports2020"
+
+// Add dependencies for the life cycle tasks
+check.dependsOn "testSportsApp", "compileSportsApp"
+build.dependsOn "compileSportsApp"
