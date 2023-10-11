@@ -10,23 +10,50 @@ plugins {
     id "base" 
 }
 
+// DLC should be set as Environment Variable / System Property or Gradle Property to use OEDF plugins 
 println "DLC: ${abl.dlcHome}"
 
 // Global settings that other tasks use
 abl {
-    // Database details defined inside this section applies to other ABLRun, ABLCompile and ABLUnit tasks
+    // Database details defined inside this section applies to other tasks such as ABLCompile and ABLUnit tasks
     dbConnection {
         dbName="${buildDir}/db/sports2020/sports"
-        connectionParameters = "-1"
+        connectionParameters = "-1" // use single user mode
+    }
+    dbConnection {
+        dbName="${buildDir}/db/avengers/avengers"
+        connectionParameters = "-1" // use single user mode
     }
 }
 
-// Create Sports2020 database as part of the build
-task createSports2020(type: CreateDB) {
+// Create Sports database as part of the build
+task createSportsDB(type: CreateDB) {
     dbName = 'sports'
     sourceDb = "${dlcHome}/sports2020"
     outputDir = "${buildDir}/db/sports2020"
 }
+
+// Create Superheroes database as part of the build
+task createAvengersDB(type: CreateDB) {
+    dbName = 'avengers'
+    structFile = "src/main/resources/avengers/avengers.st"
+    schemaFile = "src/main/resources/avengers/avengers.df"
+    blockSize = 8
+    outputDir = "${buildDir}/db/avengers"
+}
+
+// Populate data into Avengers DB for Unit testing as part of the build
+task populateDataIntoAvengersDB() {
+    // Put the ANT part in a 'doLast{}' or 'doFirst{}' section so that it is considered a task executable action.
+    // Everything else are just configurations. Check this for more info - https://docs.gradle.org/current/userguide/ant.html 
+    doLast {
+        ant.PCTLoadData(srcDir: "src/test/resources/avengers", dlcHome: "${abl.dlcHome}") {
+            ant.DBConnection(dbName: "${buildDir}/db/avengers/avengers", singleUser: "true")
+            ant.Table(name: "avengers") // Load 'avengers.d' from the 'srcDir'
+        }
+    }
+}
+populateDataIntoAvengersDB.dependsOn "createAvengersDB"
 
 // Compile the Sport app sources
 task compileSportsApp(type: ABLCompile) {
@@ -35,8 +62,14 @@ task compileSportsApp(type: ABLCompile) {
     include "**/*.cls"
     include "**/*.p"
     rcodeDir = "${buildDir}/rcode/main/abl"
+
+    // A task sepecific DB details can be provided in the task itself.
+    // To have more DB connections, just provide DB connection details in a new 'dbConnection' section 
+    // dbConnection {
+    //     // connection details
+    // }
 }
-compileSportsApp.dependsOn "createSports2020"
+compileSportsApp.dependsOn "createSportsDB", "createAvengersDB"
 
 // Unit test the Sport app tests
 task testSportsApp(type: ABLUnit) {
@@ -46,7 +79,8 @@ task testSportsApp(type: ABLUnit) {
     outputDir = "${buildDir}/test-results/test"
     arguments = [haltOnFailure: "true"]
 }
-testSportsApp.dependsOn "createSports2020"
+// For test ensure the databases are created and the data is loaded
+testSportsApp.dependsOn "createSportsDB", "createAvengersDB", "populateDataIntoAvengersDB"
 
 // Add dependencies for the life cycle tasks
 check.dependsOn "testSportsApp", "compileSportsApp"

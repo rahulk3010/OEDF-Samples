@@ -12,10 +12,11 @@
 USING Progress.Lang.*.
 USING OpenEdge.Core.Assert FROM PROPATH.
 USING sports.FirstCustomer FROM PROPATH.
+USING avengers.FirstAvenger FROM PROPATH.
 
 BLOCK-LEVEL ON ERROR UNDO, THROW.
 
-CLASS sports.FirstCustomerTest:
+CLASS avengers.FirstAvengerTest:
     
     /*------------------------------------------------------------------------------
             Purpose:                                                                        
@@ -33,18 +34,18 @@ CLASS sports.FirstCustomerTest:
     ------------------------------------------------------------------------------*/
     @Test. 
     METHOD PUBLIC VOID testGetName(  ):
-        VAR CHAR custNameExpected.
-        VAR CHAR custNameActual.
-        VAR FirstCustomer firstCustomer.
+        VAR CHAR nameExpected.
+        VAR CHAR nameActual.
+        VAR FirstAvenger firstAvenger.
         
-        FIND FIRST Customer.
-        custNameExpected = Customer.Name.
+        FIND FIRST Avengers.
+        nameExpected = Avengers.Name.
         
-        firstCustomer = NEW FirstCustomer().
-        custNameActual = firstCustomer:getName().
+        firstAvenger = NEW FirstAvenger().
+        nameActual = firstAvenger:getName().
         
-        Assert:NotEmpty(custNameActual).
-        Assert:Equals(custNameExpected, custNameActual).
+        Assert:NotEmpty(nameActual).
+        Assert:Equals(nameExpected, nameActual).
         RETURN.
     END METHOD.
     
@@ -52,10 +53,10 @@ CLASS sports.FirstCustomerTest:
             Purpose:                                                                        
             Notes:                                                                        
     ------------------------------------------------------------------------------*/
-
+ 
     @TearDown.
     METHOD PUBLIC VOID tearDown(  ):
         RETURN.
-    END METHOD.
+    END METHOD. 
      
 END CLASS.

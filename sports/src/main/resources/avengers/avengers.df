@@ -1,0 +1,30 @@
+ADD TABLE "avengers"
+  AREA "Info Area"
+  DESCRIPTION "Avengers information"
+  DUMP-NAME "avengers"
+
+ADD FIELD "Name" OF "avengers" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Name"
+  POSITION 3
+  MAX-WIDTH 40
+  ORDER 20
+
+ADD FIELD "Address" OF "avengers" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Addr"
+  POSITION 4
+  MAX-WIDTH 40
+  ORDER 30
+
+ADD INDEX "name" ON "avengers" 
+  AREA "Info Index Area"
+  INDEX-FIELD "Name" ASCENDING ABBREVIATED 
+
+.
+PSC
+cpstream=ISO8859-1
+.
+0000004701
