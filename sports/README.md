@@ -8,9 +8,12 @@
 1. Sports
     - Created from a Sports2020 database from DLC (OpenEdge install location) as part of the build 
     - Use Single User mode (`-1` option) to connect
+
 1. Avengers
     - Created from `structure` (`.st`) and `schema`(`.df`) files as part of the build 
     - For the Unit tests, data is loaded from data (`.d`) files
+    - Schema files  -> src/main/resources/avengers
+    - Data files    -> src/test/resources/avengers
 
 ## Build the app
 1. Navigate to the `sports` folder
