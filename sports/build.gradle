@@ -13,9 +13,12 @@ plugins {
     id "base" 
 }
 
+group = 'com.progress.openedge'
+description = 'Sports ABL Library App'
+
 // DLC should be set as Environment Variable, System Property or Gradle Property to use OEDF plugins 
 println "DLC: ${abl.dlcHome}"
-
+println "App version: ${version}"
 
 // Global settings that other tasks use
 abl {
